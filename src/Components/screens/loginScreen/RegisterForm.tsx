@@ -43,15 +43,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   const [userTypes, setUserTypes] = useState<UserType[]>([]);
 
   useEffect(() => {
-    axios.get<Gender[]>('http://ecodelicias.somee.com/api/ControllerGender')
+    axios.get<Gender[]>('https://ecodelicias.somee.com/api/ControllerGender')
       .then(r => setGenders(r.data))
       .catch(() => message.error('Error al cargar los géneros'));
 
-    axios.get<Country[]>('http://ecodelicias.somee.com/api/ControllerCountry')
+    axios.get<Country[]>('https://ecodelicias.somee.com/api/ControllerCountry')
       .then(r => setCountries(r.data))
       .catch(() => message.error('Error al cargar los países'));
 
-    axios.get<UserType[]>('http://ecodelicias.somee.com/api/ControllerUserType')
+    axios.get<UserType[]>('https://ecodelicias.somee.com/api/ControllerUserType')
       .then(r => setUserTypes(r.data))
       .catch(() => message.error('Error al cargar tipos de usuario'));
   }, []);
