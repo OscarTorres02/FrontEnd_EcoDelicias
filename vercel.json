@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/ecologicalBlog", "destination": "/index.html" },
+    { "source": "/recipes", "destination": "/index.html" },
+    { "source": "/reports", "destination": "/index.html" },
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
