@@ -7,7 +7,7 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
-
+//se imporntan componentes
 import App from './App';
 import HomeScreen from './Components/screens/homeScreen/HomeScreen';
 import RecipesScreen from './Components/screens/recipesScreen/RecipesScreen';
