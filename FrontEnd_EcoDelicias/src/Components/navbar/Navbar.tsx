@@ -1,7 +1,7 @@
 import { Menu } from "antd";
 import type { MenuProps } from "antd";
 import styled from 'styled-components';
-import { HomeOutlined, UnorderedListOutlined, AppstoreAddOutlined, UsergroupAddOutlined, FileDoneOutlined, LoginOutlined, AppstoreOutlined } from '@ant-design/icons';
+import { HomeOutlined, UnorderedListOutlined, AppstoreAddOutlined, LoginOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { useAuth } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";  // Importa useNavigate
 
@@ -44,11 +44,8 @@ function Navbar() {
   ];
   const itemsNavbarLogged: MenuItem[] = [
     { key: "/", label: <a href="/"><HomeOutlined />Inicio</a> },
-    { key: "/exercises", label: <a href="/exercises"><UnorderedListOutlined />Exercises</a> },
-    { key: "/meals", label: <a href="/meals"><AppstoreAddOutlined />Meals</a> },
-    { key: "nutritionMeals", label: <a href="/nutritionMeals"><UsergroupAddOutlined />Nutrition Meals</a> },
-    { key: "workoutExercises", label: <a href="/workoutExercises"><FileDoneOutlined />Workout Exercises</a> },
-    { key: "workout", label: <a href="/workout"><AppstoreOutlined />Workout</a> },
+    { key: "/recipes", label: <a href="/recipes"><UnorderedListOutlined />Recipes</a> },
+    { key: "/ecologicalBlog", label: <a href="/ecologicalBlog"><AppstoreAddOutlined />EcologicalBlog</a> },
     { key: "reports", label: <a href="/reports"><AppstoreOutlined />Reports</a> },
     { key: "logOut", label: <button onClick={() => { logOut(); navigate('/'); }}><LoginOutlined />Cerrar Sesión</button> }, // Redirigir a inicio
   ];

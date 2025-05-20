@@ -9,8 +9,8 @@ import {
   Checkbox,
   Modal,
 } from 'antd';
-import { ZodError } from 'zod';
-import { registerSchema } from '../../../assets/lib/zod/register';
+//import { ZodError } from 'zod';
+//import { registerSchema } from '../../../assets/lib/zod/register';
 import axios from 'axios';
 import './LoginScreen.css';
 

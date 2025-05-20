@@ -13,7 +13,7 @@ export const useLogin = () => {
   const login = async (formLogin: IloginForm) => {
     setLoading(true);
     try {
-      const response = await myApi.post("/Login", formLogin);
+      const response = await myApi.post("/ControllerLogin", formLogin);
       if (response.data.token) {
         localStorage.setItem('token', response.data.token); // Guarda el token
         message.success('Inicio de sesión exitoso');

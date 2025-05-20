@@ -38,7 +38,7 @@ const LoginScreen: React.FC = () => {
 
   const validatedLogin = async (formLogin: IloginForm): Promise<LoginResponse | null> => {
     try {
-      const response = await myApi.post<LoginResponse>("/login", formLogin);
+      const response = await myApi.post<LoginResponse>("/ControllerLogin", formLogin);
       return response.data;
     } catch {
       return null;

@@ -1,10 +1,26 @@
 // src/components/screens/reportsScreen/ReportsScreen.tsx
 import React from "react";
-import { Spin, Alert, Row, Col, Card, Typography, Button } from "antd";
+import {
+  Spin,
+  Alert,
+  Row,
+  Col,
+  Card,
+  Typography,
+  Button,
+} from "antd";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import useReports from "../../../hooks/useReports";
 import type { AdminReportData } from "../../../hooks/useReports";
 
 const { Title, Text } = Typography;
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const ReportCard = ({ title, value }: { title: string; value: number }) => (
   <Card
@@ -51,7 +67,12 @@ const ReportsScreen: React.FC = () => {
 
   if (!data) return null;
 
-  const report = data as AdminReportData;
+  const { totalUsers, totalCategories, totalCountries, totalDifficulties } =
+    data as AdminReportData;
+
+  // Datos para los dos pasteles
+  const countriesData = [{ name: "Países", value: totalCountries }];
+  const difficultiesData = [{ name: "Dificultades", value: totalDifficulties }];
 
   return (
     <div style={{ padding: 24 }}>
@@ -62,16 +83,62 @@ const ReportsScreen: React.FC = () => {
 
       <Row gutter={[16, 16]}>
         <Col xs={24} md={6}>
-          <ReportCard title="Total de Usuarios" value={report.totalUsers} />
+          <ReportCard title="Total de Usuarios" value={totalUsers} />
         </Col>
         <Col xs={24} md={6}>
-          <ReportCard title="Total Categorías" value={report.totalCategories} />
+          <ReportCard title="Total Categorías" value={totalCategories} />
         </Col>
-        <Col xs={24} md={6}>
-          <ReportCard title="Total Países" value={report.totalCountries} />
+      </Row>
+
+      <Row gutter={[24, 24]} style={{ marginTop: 32 }}>
+        <Col xs={24} md={12}>
+          <Card title="Total Países (Pastel)">
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={countriesData}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={40}
+                  outerRadius={80}
+                  label
+                >
+                  {countriesData.map((_, idx) => (
+                    <Cell
+                      key={`cell-country-${idx}`}
+                      fill={COLORS[idx % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </Card>
         </Col>
-        <Col xs={24} md={6}>
-          <ReportCard title="Total Dificultades" value={report.totalDifficulties} />
+
+        <Col xs={24} md={12}>
+          <Card title="Total Dificultades (Pastel)">
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={difficultiesData}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={40}
+                  outerRadius={80}
+                  label
+                >
+                  {difficultiesData.map((_, idx) => (
+                    <Cell
+                      key={`cell-diff-${idx}`}
+                      fill={COLORS[(idx + 1) % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </Card>
         </Col>
       </Row>
     </div>
