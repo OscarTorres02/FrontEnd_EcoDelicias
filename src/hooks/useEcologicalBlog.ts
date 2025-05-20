@@ -12,7 +12,7 @@ export type EcologicalBlog = {
   userId: number;
 };
 
-const BASE_URL = 'http://ecodelicias.somee.com/api/ControllerEcologicalBlog';
+const BASE_URL = 'https://ecodelicias.somee.com/api/ControllerEcologicalBlog';
 
 const useEcologicalBlogs = () => {
   const [blogs, setBlogs] = useState<EcologicalBlog[]>([]);

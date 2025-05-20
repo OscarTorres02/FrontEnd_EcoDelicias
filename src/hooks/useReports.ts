@@ -29,10 +29,10 @@ export const useReports = () => {
         countriesRes,
         difficultiesRes,
       ] = await Promise.all([
-        axios.get<User[]>("http://ecodelicias.somee.com/api/ControllerUser"),
-        axios.get<Category[]>("http://ecodelicias.somee.com/api/ControllerCategory"),
-        axios.get<Country[]>("http://ecodelicias.somee.com/api/ControllerCountry"),
-        axios.get<Difficulty[]>("http://ecodelicias.somee.com/api/ControllerDifficulty"),
+        axios.get<User[]>("https://ecodelicias.somee.com/api/ControllerUser"),
+        axios.get<Category[]>("https://ecodelicias.somee.com/api/ControllerCategory"),
+        axios.get<Country[]>("https://ecodelicias.somee.com/api/ControllerCountry"),
+        axios.get<Difficulty[]>("https://ecodelicias.somee.com/api/ControllerDifficulty"),
       ]);
 
       const totalUsers = usersRes.data.length;

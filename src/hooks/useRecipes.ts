@@ -17,7 +17,7 @@ export interface Recipe {
   userId: number;
 }
 
-const BASE_URL = 'http://ecodelicias.somee.com/api/ControllerRecipes'; // Cambia esto a tu URL real
+const BASE_URL = 'https://ecodelicias.somee.com/api/ControllerRecipes'; // Cambia esto a tu URL real
 
 const useRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
