@@ -2,25 +2,14 @@
     "version": 2,
     "rewrites": [
       {
-        "source": "/exercises",
+        "source": "/ecologicalBlog",
         "destination": "/index.html"
       },
       {
-        "source": "/meals",
+        "source": "/recipes",
         "destination": "/index.html"
       },
-      {
-        "source": "/nutritionMeals",
-        "destination": "/index.html"
-      },
-      {
-        "source": "/workoutExercises",
-        "destination": "/index.html"
-      },
-      {
-        "source": "/workout",
-        "destination": "/index.html"
-      },
+      
       {
         "source": "/reports",
         "destination": "/index.html"
