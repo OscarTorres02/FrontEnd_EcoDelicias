@@ -1,5 +1,5 @@
-// src/components/screens/reportsScreen/ReportsScreen.tsx
-//hola estos son cambios basicos
+// src/Components/screens/reportsScreen/ReportsScreen.tsx
+
 import React from "react";
 import {
   Spin,
@@ -15,13 +15,19 @@ import {
   Pie,
   Cell,
   Tooltip,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Legend,
   ResponsiveContainer,
 } from "recharts";
 import useReports from "../../../hooks/useReports";
 import type { AdminReportData } from "../../../hooks/useReports";
 
 const { Title, Text } = Typography;
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF", "#FF4D4F"];
 
 const ReportCard = ({ title, value }: { title: string; value: number }) => (
   <Card
@@ -41,14 +47,7 @@ const ReportsScreen: React.FC = () => {
 
   if (loading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "60vh",
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "60vh" }}>
         <Spin size="large" />
       </div>
     );
@@ -68,47 +67,77 @@ const ReportsScreen: React.FC = () => {
 
   if (!data) return null;
 
-  const { totalUsers, totalCategories, totalCountries, totalDifficulties } =
-    data as AdminReportData;
+  const {
+    totalUsers,
+    totalCategories,
+    totalCountries,
+    totalDifficulties,
+    recipes,
+    categories,
+    difficulties,
+    countries,
+    users
+  } = data as AdminReportData;
 
-  // Datos para los dos pasteles
-  const countriesData = [{ name: "Países", value: totalCountries }];
-  const difficultiesData = [{ name: "Dificultades", value: totalDifficulties }];
+  // Dificultades
+  const difficultyCounts: { [key: number]: number } = {};
+  recipes.forEach((rec) => {
+    difficultyCounts[rec.difficultyId] = (difficultyCounts[rec.difficultyId] || 0) + 1;
+  });
+
+  const difficultiesData = difficulties
+    .filter((d) => difficultyCounts[d.difficultyId])
+    .map((d) => ({
+      name: d.difficulty,
+      value: difficultyCounts[d.difficultyId],
+    }));
+
+  // Países: se vinculan recetas con usuarios para obtener el país
+  const userMap = new Map(users.map(user => [user.userId, user.countryId]));
+  const countryCounts: { [key: number]: number } = {};
+  recipes.forEach((rec) => {
+    const countryId = userMap.get(rec.userId);
+    if (countryId !== undefined) {
+      countryCounts[countryId] = (countryCounts[countryId] || 0) + 1;
+    }
+  });
+
+  const countriesData = Object.entries(countryCounts).map(([id, count]) => {
+    const country = countries.find(c => c.countryId === Number(id));
+    return {
+      name: country ? country.country : `País ${id}`,
+      value: count
+    };
+  });
+
+  // Categorías
+  const categoryBarData = categories.map((cat) => ({
+    name: cat.category,
+    cantidad: recipes.filter((rec) => rec.categoryId === cat.categoryId).length,
+  }));
 
   return (
     <div style={{ padding: 24 }}>
       <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
-        <Title level={3}>Reporte General</Title>
+        <Title level={3}>Dashboard de Reportes</Title>
         <Button onClick={refresh}>Refrescar</Button>
       </Row>
 
       <Row gutter={[16, 16]}>
-        <Col xs={24} md={6}>
-          <ReportCard title="Total de Usuarios" value={totalUsers} />
-        </Col>
-        <Col xs={24} md={6}>
-          <ReportCard title="Total Categorías" value={totalCategories} />
-        </Col>
+        <Col xs={24} md={6}><ReportCard title="Total de Usuarios" value={totalUsers} /></Col>
+        <Col xs={24} md={6}><ReportCard title="Total Categorías" value={totalCategories} /></Col>
+        <Col xs={24} md={6}><ReportCard title="Total Países" value={totalCountries} /></Col>
+        <Col xs={24} md={6}><ReportCard title="Total Dificultades" value={totalDifficulties} /></Col>
       </Row>
 
       <Row gutter={[24, 24]} style={{ marginTop: 32 }}>
         <Col xs={24} md={12}>
-          <Card title="Total Países (Pastel)">
+          <Card title="Recetas por País (Pastel)">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
-                <Pie
-                  data={countriesData}
-                  dataKey="value"
-                  nameKey="name"
-                  innerRadius={40}
-                  outerRadius={80}
-                  label
-                >
+                <Pie data={countriesData} dataKey="value" nameKey="name" innerRadius={40} outerRadius={80} label>
                   {countriesData.map((_, idx) => (
-                    <Cell
-                      key={`cell-country-${idx}`}
-                      fill={COLORS[idx % COLORS.length]}
-                    />
+                    <Cell key={`cell-country-${idx}`} fill={COLORS[idx % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -118,26 +147,33 @@ const ReportsScreen: React.FC = () => {
         </Col>
 
         <Col xs={24} md={12}>
-          <Card title="Total Dificultades (Pastel)">
+          <Card title="Recetas por Dificultad (Pastel)">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
-                <Pie
-                  data={difficultiesData}
-                  dataKey="value"
-                  nameKey="name"
-                  innerRadius={40}
-                  outerRadius={80}
-                  label
-                >
+                <Pie data={difficultiesData} dataKey="value" nameKey="name" innerRadius={40} outerRadius={80} label>
                   {difficultiesData.map((_, idx) => (
-                    <Cell
-                      key={`cell-diff-${idx}`}
-                      fill={COLORS[(idx + 1) % COLORS.length]}
-                    />
+                    <Cell key={`cell-diff-${idx}`} fill={COLORS[(idx + 1) % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
               </PieChart>
+            </ResponsiveContainer>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row style={{ marginTop: 32 }}>
+        <Col span={24}>
+          <Card title="Cantidad de Recetas por Categoría (Barras)">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={categoryBarData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="cantidad" fill="#1890ff" />
+              </BarChart>
             </ResponsiveContainer>
           </Card>
         </Col>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Input,
@@ -24,7 +23,6 @@ const { Panel } = Collapse;
 const { Meta } = Card;
 const { Option } = Select;
 
-// ✅ Interfaces corregidas
 interface Category { categoryId: number; category: string; }
 interface Difficulty { difficultyId: number; difficulty: string; }
 
@@ -34,6 +32,7 @@ const RecipesScreen: React.FC = () => {
 
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm();
@@ -47,25 +46,20 @@ const RecipesScreen: React.FC = () => {
 
     fetch(`${base}/ControllerCategory`)
       .then((res) => res.json())
-      .then((data: Category[]) => {
-        console.log("Categories:", data);
-        setCategories(data);
-      })
+      .then((data: Category[]) => setCategories(data))
       .catch(console.error);
 
     fetch(`${base}/ControllerDifficulty`)
       .then((res) => res.json())
-      .then((data: Difficulty[]) => {
-        console.log("Difficulties:", data);
-        setDifficulties(data);
-      })
+      .then((data: Difficulty[]) => setDifficulties(data))
       .catch(console.error);
   }, []);
 
   const filteredRecipes = recipes.filter((r) => {
     const matchesText = r.title.toLowerCase().includes(searchText.toLowerCase());
     const matchesCategory = selectedCategory ? r.categoryId === selectedCategory : true;
-    return matchesText && matchesCategory;
+    const matchesDifficulty = selectedDifficulty ? r.difficultyId === selectedDifficulty : true;
+    return matchesText && matchesCategory && matchesDifficulty;
   });
 
   const showEditModal = (r?: Recipe) => {
@@ -118,7 +112,6 @@ const RecipesScreen: React.FC = () => {
     ok ? message.success("Receta eliminada") : message.error("Error al eliminar");
   };
 
-  // ✅ Estas funciones usan las claves correctas
   const getCategoryName = (id: number) =>
     categories.find((c) => c.categoryId === id)?.category || "—";
   const getDifficultyName = (id: number) =>
@@ -143,6 +136,19 @@ const RecipesScreen: React.FC = () => {
           {categories.map((c) => (
             <Option key={c.categoryId} value={c.categoryId}>
               {c.category}
+            </Option>
+          ))}
+        </Select>
+        <Select
+          placeholder="Filtrar por dificultad"
+          allowClear
+          style={{ width: 200 }}
+          onChange={(value) => setSelectedDifficulty(value)}
+          value={selectedDifficulty}
+        >
+          {difficulties.map((d) => (
+            <Option key={d.difficultyId} value={d.difficultyId}>
+              {d.difficulty}
             </Option>
           ))}
         </Select>

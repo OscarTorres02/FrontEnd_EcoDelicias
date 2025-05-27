@@ -1,19 +1,51 @@
 // src/hooks/useReports.ts
+
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-//import { useAuth } from "../Context/AuthContext";
+
+export interface User {
+  userId: number;
+  countryId: number;
+}
+
+export interface Category {
+  categoryId: number;
+  category: string;
+}
+
+export interface Difficulty {
+  difficultyId: number;
+  difficulty: string;
+}
+
+export interface Recipe {
+  recipesId: number;
+  title: string;
+  categoryId: number;
+  difficultyId: number;
+  userId: number;
+}
+
+export interface Country {
+  countryId: number;
+  country: string;
+}
 
 export interface AdminReportData {
   totalUsers: number;
   totalCategories: number;
   totalCountries: number;
   totalDifficulties: number;
+  recipes: Recipe[];
+  categories: Category[];
+  difficulties: Difficulty[];
+  countries: Country[];
+  users: User[]; // se incluye para usar su countryId
 }
 
-export const useReports = () => {
-  //const { state } = useAuth();
-  //const userType = state.user?.userType;
+const API = "https://ecodelicias.somee.com/api";
 
+const useReports = () => {
   const [data, setData] = useState<AdminReportData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,20 +60,27 @@ export const useReports = () => {
         categoriesRes,
         countriesRes,
         difficultiesRes,
+        recipesRes
       ] = await Promise.all([
-        axios.get<User[]>("https://ecodelicias.somee.com/api/ControllerUser"),
-        axios.get<Category[]>("https://ecodelicias.somee.com/api/ControllerCategory"),
-        axios.get<Country[]>("https://ecodelicias.somee.com/api/ControllerCountry"),
-        axios.get<Difficulty[]>("https://ecodelicias.somee.com/api/ControllerDifficulty"),
+        axios.get<User[]>(`${API}/ControllerUser`),
+        axios.get<Category[]>(`${API}/ControllerCategory`),
+        axios.get<Country[]>(`${API}/ControllerCountry`),
+        axios.get<Difficulty[]>(`${API}/ControllerDifficulty`),
+        axios.get<Recipe[]>(`${API}/ControllerRecipes`)
       ]);
 
-      const totalUsers = usersRes.data.length;
-      const totalCategories = categoriesRes.data.length;
-      const totalCountries = countriesRes.data.length;
-      const totalDifficulties = difficultiesRes.data.length;
-
-      setData({ totalUsers, totalCategories, totalCountries, totalDifficulties });
-    } catch (err: any) {
+      setData({
+        totalUsers: usersRes.data.length,
+        totalCategories: categoriesRes.data.length,
+        totalCountries: countriesRes.data.length,
+        totalDifficulties: difficultiesRes.data.length,
+        recipes: recipesRes.data,
+        categories: categoriesRes.data,
+        difficulties: difficultiesRes.data,
+        countries: countriesRes.data,
+        users: usersRes.data,
+      });
+    } catch (err) {
       console.error("Error al obtener reportes:", err);
       setError("No se pudieron cargar los reportes");
     } finally {
@@ -57,17 +96,3 @@ export const useReports = () => {
 };
 
 export default useReports;
-
-// Tipos auxiliares
-interface User {
-  userId: number;
-}
-interface Category {
-  categoryId: number;
-}
-interface Country {
-  countryId: number;
-}
-interface Difficulty {
-  difficultyId: number;
-}
