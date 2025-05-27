@@ -21,7 +21,7 @@ function AppContent() {
       </main>
 
       <footer>
-        ECO DELICIAS
+        COOKDEV
         {user && (
           <div style={{ marginTop: "1rem" }}>
             <MailtoButton
