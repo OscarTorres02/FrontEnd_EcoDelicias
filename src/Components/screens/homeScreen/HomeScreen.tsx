@@ -28,13 +28,13 @@ const workoutRooms: WorkoutRoom[] = [
   },
   {
     nombre: "Introducción",
-    descripcion: "¡Bienvenidos a un espacio donde la cocina se encuentra con la conciencia ambiental! En [Nombre de tu página web], creemos que disfrutar de una buena comida y cuidar nuestro planeta van de la mano.",
+    descripcion: "¡Bienvenidos a un espacio donde la cocina se encuentra con la conciencia ambiental! En CookDev, creemos que disfrutar de una buena comida y cuidar nuestro planeta van de la mano.",
     resumen: "Descubre recetas inspiradoras y consejos prácticos para reducir y reutilizar residuos, comenzando por el aceite de cocina. Cocina con sabor y responsabilidad en nuestra comunidad.",
     icon: faInfoCircle,
   },
   {
     nombre: "Historia",
-    descripcion: "[Nombre de tu página web] nació de la pasión compartida por la gastronomía y la preocupación por el impacto ambiental de nuestros hábitos cotidianos. Nos enfocamos en el aceite usado como punto de partida, investigando métodos seguros y creativos para su reutilización.",
+    descripcion: "CookDev nació de la pasión compartida por la gastronomía y la preocupación por el impacto ambiental de nuestros hábitos cotidianos. Nos enfocamos en el aceite usado como punto de partida, investigando métodos seguros y creativos para su reutilización.",
     resumen: "Desde nuestros inicios, hemos evolucionado de compartir recetas a construir una plataforma que promueve la cocina sostenible y el aprovechamiento de residuos, con el aceite usado como nuestro primer gran paso.",
     icon: faHistory,
   }
@@ -68,7 +68,7 @@ const HomeScreen: React.FC = () => {
   return (
     <div className="home-screen">
       <div className="welcome-section">
-        <h1 className="welcome-title">BIENVENIDOS ECO DELICIAS </h1>
+        <h1 className="welcome-title">BIENVENIDOS A COOKDEV </h1>
         <p className="welcome-subtitle">
           MEJORA TUS HABITOS DE VIDA DESDE HOY.
         </p>

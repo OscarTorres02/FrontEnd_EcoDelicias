@@ -17,7 +17,7 @@ export interface Recipe {
   userId: number;
 }
 
-const BASE_URL = 'https://ecodelicias.somee.com/api/ControllerRecipes'; // Cambia esto a tu URL real
+const BASE_URL = 'https://ecodelicias.somee.com/api/ControllerRecipes';
 
 const useRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -41,8 +41,8 @@ const useRecipes = () => {
 
   const createRecipe = async (recipe: Omit<Recipe, 'recipesId'>): Promise<boolean> => {
     try {
-      const resp = await axios.post(BASE_URL, recipe);
-      setRecipes(prev => [...prev, resp.data]);
+      const resp = await axios.post<Recipe>(BASE_URL, recipe); // 👈 Tipado correcto
+      setRecipes(prev => [...prev, resp.data]); // ✅ Ya no da error
       return true;
     } catch (err) {
       setError('Error al crear la receta');
